@@ -8,6 +8,7 @@ import sys
 import streamlit as st
 from streamlit_folium import folium_static
 import folium
+from folium.features import DivIcon
 
 import matplotlib as mpl
 import matplotlib.patheffects as effects
@@ -29,7 +30,13 @@ def make_map(pjcode, hole_no, test_location):
             width=1200,
             height=800,
         )
-        folium.Marker(test_location, popup="<i>" + hole_no + "<i>").add_to(m)
+        folium.Marker(test_location).add_to(m)
+        icon=folium.DivIcon(html=f"""<div style="font-family: courier new; color: blue">{hole_no}</div>""")
+        
+        folium.Marker(test_location, icon=DivIcon(html=f"""<div style="font-family: courier new; color: blue">{data.iloc[i]['name']}</div>""")
+            html=f"""<div style="font-size: 10pt">' + f'{hole_no}' + '</div>',
+            )).add_to(m)
+
         m.save(f"{pjcode}_{hole_no}_map_{tiletype}.html")
 
     basemap_google = {
@@ -43,8 +50,8 @@ def make_map(pjcode, hole_no, test_location):
     }
     basemap_google["Google Maps"].add_to(m)
     m.save(f"{pjcode}_{hole_no}_map_GoogleMaps.html")
-    minimize
-
+    folium_static(m)
+    
 
 def parse_dat(data):
     
